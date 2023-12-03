@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Персонаж в подземелье</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script th:inline="javascript">const username = /*[[${username}]]*/ null;</script>
+    <script src="/webjars/stomp-websocket/2.3.4/stomp.min.js"></script>
+    <script src="/webjars/sockjs-client/1.5.1/sockjs.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap">
+
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin-top: 180px;
+            background-color: #1c1c1c;
+            color: #f8efe2;
+        }
+
+        .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('/startgame.gif') no-repeat center center fixed;
+            background-size: cover;
+            filter: blur(15px);
+            z-index: -1;
+            transform: scale(1.1);
+        }
+
+        h1 {
+            font-family: 'Press Start 2P', cursive;
+            text-align: center;
+            margin: 50px;
+            font-size: 46px;
+        }
+
+        h2 {
+            font-family: 'Press Start 2P', cursive;
+            text-align: center;
+            margin: 30px;
+            font-size: 20px;
+        }
+
+        .character-info {
+            max-width: 700px;
+            margin: 0 auto;
+            grid-row: auto;
+            grid-column: auto;
+        }
+
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            border-bottom: 1px solid rgba(190, 153, 109, 0.3);
+            padding-bottom: 2px;
+        }
+
+        .label {
+            flex: 1;
+            text-align: left;
+        }
+
+        .value {
+            flex: 1;
+            text-align: right;
+        }
+
+        #characterInfo p {
+            display: flex;
+            align-items: center;
+        }
+
+        #characterInfo i {
+            margin-right: 5px;
+        }
+
+        #characterInfo span {
+            margin-left: 5px;
+        }
+
+        #logMessages {
+            width: 50%;
+            margin: 20px auto;
+            background-color: rgba(17, 16, 16, 0.75);
+            padding: 10px;
+            border-radius: 5px;
+            overflow-y: auto;
+            max-height: 100px;
+        }
+
+        .info-box {
+            color: #a4a4a4;
+            line-height: 1.4;
+        }
+
+        #nextLevelButton {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            font-size: 18px;
+            cursor: pointer;
+            background-color: transparent;
+            color: white;
+            border: 1px solid #af9b4c;
+            border-radius: 5px;
+        }
+
+        #nextLevelButton:hover {
+            background-color: #af9b4c;
+        }
+    </style>
+</head>
+<body>
+<h1>Dungeon <span id="dungeonLevels">5/10</span></h1>
+<div class="background"></div>
+<h2>Информация о персонаже</h2>
+<div class="character-info">
+    <div class="info-item">
+        <span class="label">Имя:</span>
+        <span class="value" id="characterName">SimpleName</span>
+    </div>
+    <div class="info-item">
+        <span class="label">Уровень:</span>
+        <span class="value" id="characterLevel">10</span>
+    </div>
+    <div class="info-item">
+        <span class="label">Жизни:</span>
+        <span class="value" id="characterHealth">100/100</span>
+    </div>
+    <div class="info-item">
+        <span class="label">Урон:</span>
+        <span class="value" id="characterHitPower">40</span>
+    </div>
+    <div class="info-item">
+        <span class="label">Щит:</span>
+        <span class="value" id="characterShield">40</span>
+    </div>
+    <div class="info-item">
+        <span class="label">Выносливость:</span>
+        <span class="value" id="characterAgility">0.50</span>
+    </div>
+    <div class="info-item">
+        <span class="label">Зелья лечения:</span>
+        <div id="healthPotionImages"></div>
+    </div>
+    <div class="info-item">
+        <span class="label">Предметы персонажа:</span>
+        <span class="value" id="characterItems">Щит, Мечь, Зелье здовроья</span>
+    </div>
+
+</div>
+<button id="nextLevelButton">Спуститься на уровень ниже</button>
+<div id="logMessages" class="info-box"></div>
+
+
+<script type="text/javascript" src="/js/dungeon.js"></script>
+<script type="text/javascript" src="/js/websocket.js"></script>
+
+</body>
+</html>

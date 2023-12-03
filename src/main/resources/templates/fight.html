@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Битва</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script th:inline="javascript">const username = /*[[${username}]]*/ null;</script>
+    <script th:inline="javascript">const monsterId = /*[[${monsterId}]]*/ null;</script>
+    <script src="/webjars/stomp-websocket/2.3.4/stomp.min.js"></script>
+    <script src="/webjars/sockjs-client/1.5.1/sockjs.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap">
+
+</head>
+<style>
+    body {
+        font-family: 'Arial', sans-serif;
+        margin-top: 100px;
+        background-color: #1c1c1c;
+        color: #f8efe2;
+    }
+
+    .background {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: url('/startgame.gif') no-repeat center center fixed;
+        background-size: cover;
+        filter: blur(15px);
+        z-index: -1;
+        transform: scale(1.1);
+    }
+
+    h1 {
+        font-family: 'Press Start 2P', cursive;
+        text-align: center;
+        margin: 50px;
+        font-size: 64px;
+    }
+
+    h2 {
+        font-family: 'Press Start 2P', cursive;
+        text-align: center;
+        margin: 10px;
+        font-size: 20px;
+    }
+
+    .character-info {
+        max-width: 700px;
+        margin: 0 auto;
+        grid-row: auto;
+        grid-column: auto;
+    }
+
+    .fight-info {
+        max-width: 700px;
+        margin: 0 auto;
+        grid-row: auto;
+        grid-column: auto;
+    }
+
+    .info-item {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+        border-bottom: 1px solid rgba(190, 153, 109, 0.3);
+        padding-bottom: 2px;
+    }
+
+    .label {
+        flex: 1;
+        text-align: left;
+    }
+
+    .value {
+        flex: 1;
+        text-align: right;
+    }
+
+    #fightInfo p {
+        display: flex;
+        align-items: center;
+    }
+
+    #fightInfo i {
+        margin-right: 5px;
+    }
+
+    #fightInfo span {
+        margin-left: 5px;
+    }
+
+    #characterInfo p {
+        display: flex;
+        align-items: center;
+    }
+
+    #characterInfo i {
+        margin-right: 5px;
+    }
+
+    #characterInfo span {
+        margin-left: 5px;
+    }
+
+    #logMessages {
+        width: 50%;
+        margin: 20px auto;
+        background-color: rgba(17, 16, 16, 0.75);
+        padding: 10px;
+        border-radius: 5px;
+        overflow-y: auto;
+        max-height: 100px;
+    }
+
+    .info-box {
+        color: #a4a4a4;
+    }
+
+    .button-container {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        margin-top: auto;
+    }
+
+    .action-button:disabled {
+        background-color: transparent;
+        color: #333333;
+        cursor: not-allowed;
+        border: 1px solid #3a3422;
+    }
+
+    .action-button {
+        padding: 10px 20px;
+        font-size: 18px;
+        cursor: pointer;
+        background-color: transparent;
+        color: white;
+        border: 1px solid #af9b4c;
+        border-radius: 5px;
+        margin-top: 20px;
+    }
+
+    .action-button:hover {
+        background-color: #af9b4c;
+    }
+</style>
+<body>
+<h1>Битва</h1>
+<div class="background"></div>
+<div id="fightInfo" class="fight-info">
+    <h2>Информация о персонаже</h2>
+    <div id="characterInfo" class="character-info">
+        <div class="info-item">
+            <span class="label">Имя:</span>
+            <span class="value" id="characterName">SimpleName</span>
+        </div>
+        <div class="info-item">
+            <span class="label">Уровень:</span>
+            <span class="value" id="characterLevel">10</span>
+        </div>
+        <div class="info-item">
+            <span class="label">Жизни:</span>
+            <span class="value" id="characterHealth">100/100</span>
+        </div>
+        <div class="info-item">
+            <span class="label">Урон:</span>
+            <span class="value" id="characterHitPower">40</span>
+        </div>
+        <div class="info-item">
+            <span class="label">Щит:</span>
+            <span class="value" id="characterShield">40</span>
+        </div>
+        <div class="info-item">
+            <span class="label">Выносливость:</span>
+            <span class="value" id="characterAgility">0.50</span>
+        </div>
+        <div class="info-item">
+            <span class="label">Зелья лечения:</span>
+            <div id="healthPotionImages"></div>
+        </div>
+        <div class="info-item">
+            <span class="label">Предметы персонажа:</span>
+            <span class="value" id="characterItems">Щит, Мечь, Зелье здовроья</span>
+        </div>
+    </div>
+    <br>
+    <h2>Информация о монстре</h2>
+    <div id="monsterInfo" class="character-info">
+        <div class="info-item">
+            <span class="label">Имя:</span>
+            <span class="value" id="monsterName">SimpleName</span>
+        </div>
+        <div class="info-item">
+            <span class="label">Уровень:</span>
+            <span class="value" id="monsterLevel">10</span>
+        </div>
+        <div class="info-item">
+            <span class="label">Жизни:</span>
+            <span class="value" id="monsterHealth">100</span>
+        </div>
+        <div class="info-item">
+            <span class="label">Урон:</span>
+            <span class="value" id="monsterHitPower">40</span>
+        </div>
+    </div>
+    <div id="fightActions" class="button-container">
+        <button class="action-button" id="attackButton">Атаковать</button>
+        <button class="action-button" id="useHealthPotionButton">Зелье лечения</button>
+        <button class="action-button" id="runawayButton">Попытаться убежать</button>
+    </div>
+</div>
+
+
+<div id="logMessages" class="info-box"></div>
+<script type="text/javascript" src="/js/fight.js"></script>
+<script type="text/javascript" src="/js/websocket.js"></script>
+</body>
+</html>

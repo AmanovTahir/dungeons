@@ -1,0 +1,32 @@
+body {
+    padding: 50px;
+}
+
+.characters-dungeons {
+    display: flex;
+    justify-content: space-between;
+}
+
+.characters, .dungeons {
+    border: 1px solid steelblue;
+    width: 400px;
+    border-collapse: collapse;
+}
+
+.characters th, .characters td, .dungeons th, .dungeons td {
+    padding: 5px;
+    border: 1px solid steelblue;
+}
+
+.characters td:first-child, .characters td:last-child,
+.dungeons td:first-child, .dungeons td:last-child {
+    width: 50px;
+}
+
+.selected {
+    background-color: #46300e;
+}
+
+.selected {
+    background-color: #46300e;
+}
