@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dungeon Game</title>
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap">
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            font-family: 'Press Start 2P', cursive;
+            background: url('/startgame.gif') no-repeat center center fixed;
+            background-size: cover;
+            z-index: -1;
+        }
+
+        .content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: white;
+        }
+
+        h1 {
+            font-size: 46px;
+        }
+
+        h2 {
+            font-size: 15px;
+        }
+
+        .start-button {
+            padding: 10px 20px;
+            font-size: 18px;
+            cursor: pointer;
+            background-color: transparent;
+            color: white;
+            border: 1px solid #af9b4c;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+
+        .start-button:hover {
+            background-color: #af9b4c;
+        }
+    </style>
+</head>
+<body>
+
+<div class="content">
+    <h2><span th:text="${username}"></span>!</h2>
+    <h2>К сожалению, мы не нашли вашу игру.
+        Попробуйте начать новую.</h2>
+    <h1>Dungeon</h1>
+
+    <form action="/game/select" method="get">
+        <button class="start-button" type="submit">Начать новую игру</button>
+    </form>
+</div>
+
+</body>
+</html>
