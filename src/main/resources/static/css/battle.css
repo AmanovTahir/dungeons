@@ -1,0 +1,78 @@
+/* Общие стили для всей страницы */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f0f0;
+}
+
+h1 {
+    background-color: #333;
+    color: #fff;
+    padding: 10px;
+    margin: 0;
+}
+
+/* Контейнер для всех элементов битвы */
+.battle-container {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+    background-color: #fff;
+    margin: 20px;
+    border: 1px solid #ccc;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Стили для информации о персонаже и монстре */
+.info-box {
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-right: 20px;
+}
+
+.info-box h2 {
+    font-size: 18px;
+    margin-top: 0;
+}
+
+.info-box p {
+    margin: 0;
+}
+
+/* Стили для лога действий */
+#actionLog {
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    padding: 10px;
+    flex-grow: 1;
+}
+
+#actionLog h2 {
+    font-size: 18px;
+    margin-top: 0;
+}
+
+#logMessages {
+    height: 200px; /* Высота лога может быть настроена по вашему усмотрению */
+    overflow-y: scroll;
+}
+
+/* Стили для кнопок действий */
+#fightActions {
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    padding: 10px;
+    width: 200px;
+}
+
+#fightActions h2 {
+    font-size: 18px;
+    margin-top: 0;
+}
+
+#fightActions button {
+    display: block;
+    margin-bottom: 10px;
+}

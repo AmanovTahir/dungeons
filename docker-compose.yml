@@ -1,0 +1,33 @@
+version: '3'
+services:
+  datasource:
+    image: postgres
+    container_name: datasource
+    networks:
+      - web
+    environment:
+      POSTGRES_DB: dungeon_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:22.0.5
+    container_name: keycloak
+    volumes:
+      - ./keycloak:/opt/keycloak/data/import
+    networks:
+      - web
+    environment:
+      PROXY_ADDRESS_FORWARDING: true
+      KEYCLOAK_USER: admin
+      KEYCLOAK_PASSWORD: admin
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    command: -v start-dev --import-realm
+    ports:
+      - "8000:8080"
+networks:
+  web:
+    driver: bridge
